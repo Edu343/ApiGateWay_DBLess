@@ -28,8 +28,10 @@ services:
     image: bitnamilegacy/apache:2.4
     ports:
       - "8080:8080"
+      - "8443:8443"
     volumes:
       - ./apache/proxy.conf:/opt/bitnami/apache/conf/vhosts/proxy.conf
+      - ./certs:/opt/bitnami/apache/conf/certs
     networks:
       - red_interna
       - red_publica
