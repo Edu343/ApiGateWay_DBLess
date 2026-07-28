@@ -10,15 +10,11 @@ on:
 
 jobs:
   auditoria-kong:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest 
 
     steps:
-      - name: Descargar el codigo del repositorio
+      - name: Descargar el código del repositorio
         uses: actions/checkout@v4
 
       - name: Validar sintaxis y lógica de kong.yaml
-        run: |
-          docker run --rm \
-            - v ${{ github.workspace }}:/workspace \
-            -w /workspace \
-            kong/deck:latest file validate kong.yaml
+        run: docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace kong/deck:latest file validate kong.yaml
