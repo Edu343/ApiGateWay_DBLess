@@ -1,0 +1,23 @@
+_format_version: "3.0"
+
+services:
+  - name: servicio-mi-api
+    host: mi-api
+    port: 80
+    protocol: http
+    routes:
+      - name: ruta-visual
+        paths:
+          - /visual
+        strip_path: true
+        plugins:
+          - name: key-auth
+            config:
+              key_names:
+                - apikey
+
+consumers:
+  - username: manuel-app-movil
+    keyauth_credentials:
+      - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        key: ${{ env "DECK_SECRETO_APP" }}

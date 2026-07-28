@@ -1,0 +1,61 @@
+# services:
+#   cliente-prueba:
+#     image: alpine
+#     command: tail -f /dev/null
+#     networks:
+#       - mi_red_privada
+
+#   servidor-prueba:
+#     image: alpine
+#     command: tail -f /dev/null
+#     networks:
+#       - mi_red_privada
+
+# networks:
+#   mi_red_privada:
+#     driver: bridge
+
+
+services:
+
+  mi-api:
+    image: kennethreitz/httpbin
+    networks:
+      - red_interna
+
+#el recepcionsita 
+  apache-proxy:
+    image: bitnamilegacy/apache:2.4
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./apache/proxy.conf:/opt/bitnami/apache/conf/vhosts/proxy.conf
+    networks:
+      - red_interna
+      - red_publica
+  
+  kong:
+    image: kong:3.4.0-ubuntu
+   
+    environment:
+      KONG_DATABASE: off
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001 
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr 
+    
+    ports:
+      - "8001:8001"
+      - "8000:8000"
+    networks:
+      - red_interna
+      - red_publica
+
+networks:
+  red_interna:
+    internal: true
+    driver: bridge
+  red_publica:
+    driver: bridge
