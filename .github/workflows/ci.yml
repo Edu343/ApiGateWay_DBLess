@@ -17,4 +17,4 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validar sintaxis y lógica de kong.yaml
-        run: docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace kong/deck:latest file validate kong.yaml
+        run: docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace -e DECK_SECRETO_APP="${{ secrets.DECK_SECRETO_APP }}" kong/deck:latest file validate kong.yaml
