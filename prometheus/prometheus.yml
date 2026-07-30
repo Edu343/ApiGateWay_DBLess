@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s #recolecta metricas cada 5 segundos
+
+scrape_configs:
+  - job_name: 'kong-gateway'
+    static_configs:
+      #apunta al puerto administrativo de kong que es dondec se exponen las metricas
+      - targets: ['kong:8001']

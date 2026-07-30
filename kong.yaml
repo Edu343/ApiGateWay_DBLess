@@ -15,9 +15,14 @@ services:
             config:
               key_names:
                 - apikey
+        
+          
 
 consumers:
   - username: manuel-app-movil
     keyauth_credentials:
       - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        key: ${{ env "DECK_SECRETO_APP" }}
+        key: super-secreto-123
+
+plugins:
+  - name: prometheus
