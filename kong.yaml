@@ -23,6 +23,23 @@ consumers:
     keyauth_credentials:
       - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
         key: super-secreto-123
+  - username: usuarios-keycloak
+
+jwt_secrets:
+  - consumer: usuarios-keycloak
+    algorithm: RS256
+    key: http://localhost:8082/realms/api-realm
+    rsa_public_key : |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA41NvJ/3p0AQQvVi5z6fqA6HawZx8hQe4gqG5WarIm6yFhnkcYjgs1/thxm9UX7mFyjAJMwp6shOiMWRnROGIdzbg/4eKyZrkrBolxYhBs2H3hFtVPwGLxpCmgp80BH4ZG4oNvJ6/R2s7GEVLKUkEPu+hSGcPsPsIVXcR6QFGxoY6Y0FNKesfDpoQyccqm0BmedBhUBcfEnnLwpO2y7/iNzp5FZ0Sda47CX8YxNNnC/fJqWNJEXcCePoAX4Rws1e1BlS9UYRzhYQIQX1lxxTEPgJFomYBVuCsiqQaX0TYb66/eX4Bsivs+QcY3Hi7WpnV1ZEczfp47PFAj0cUDAY5hQIDAQAB
+      -----END PUBLIC KEY-----
+
 
 plugins:
   - name: prometheus
+  
+  - name: jwt
+    config:
+      claims_to_verify:
+        - exp
+
