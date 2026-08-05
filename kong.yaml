@@ -15,9 +15,37 @@ services:
             config:
               key_names:
                 - apikey
+        
+          
 
 consumers:
-  - username: manuel-app-movil
+  - username: ${{ env DECK_CONSUMER_APP_NAME}}
     keyauth_credentials:
-      - id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
-        key: ${{ env "DECK_SECRETO_APP" }}
+      - id: a${{ env DECK_SECRETO_CONSUMER_ID}}
+        key: ${{ env DECK_SECRETO_APIKEY}}
+  - username: ${{ env DECK_CONSUMER_NAME}}
+
+jwt_secrets:
+  - consumer: ${{ env DECK_CONSUMER_NAME_KEYCLOAK}}
+    algorithm: RS256
+    key: ${{ env DECK_SECRETO_CONSUMER_KEY}}
+    rsa_public_key : |
+      -----BEGIN PUBLIC KEY-----
+      ${{ env DECK_SECRETO_PUBLIC_KEY}}
+      -----END PUBLIC KEY-----
+
+
+plugins:
+  - name: prometheus
+  
+  - name: jwt
+    config:
+      claims_to_verify:
+        - exp
+
+  - name: opentelemetry
+    config:
+      # Apuntamos al contenedor interno de Jaeger en el puerto OTLP
+      endpoint: ${{ env DECK_SECRETO_OPENTELEMETRY_ENDPOINT}}
+      resource_attributes:
+        service.name: api-gateway-pasantia
