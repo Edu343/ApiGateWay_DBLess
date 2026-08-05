@@ -26,7 +26,6 @@ jobs:
           -e DECK_CONSUMER_APP_NAME="${{ secrets.DECK_CONSUMER_APP_NAME }}" \
           -e DECK_SECRETO_CONSUMER_ID="${{ secrets.DECK_SECRETO_CONSUMER_ID }}" \
           -e DECK_SECRETO_APIKEY="${{ secrets.DECK_SECRETO_APIKEY }}" \
-          -e DECK_CONSUMER_NAME="${{ secrets.DECK_CONSUMER_NAME }}" \
           -e DECK_CONSUMER_NAME_KEYCLOAK="${{ secrets.DECK_CONSUMER_NAME_KEYCLOAK }}" \
           -e DECK_SECRETO_CONSUMER_KEY="${{ secrets.DECK_SECRETO_CONSUMER_KEY }}" \
           -e DECK_SECRETO_PUBLIC_KEY="${{ secrets.DECK_SECRETO_PUBLIC_KEY }}" \
