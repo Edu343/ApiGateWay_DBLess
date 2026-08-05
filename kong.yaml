@@ -19,19 +19,19 @@ services:
           
 
 consumers:
-  - username: ${{env DECK_CONSUMER_APP_NAME}}
+  - username: ${{ env DECK_CONSUMER_APP_NAME}}
     keyauth_credentials:
-      - id: a${{env DECK_SECRETO_CONSUMER_ID}}
-        key: ${{env DECK_SECRETO_APIKEY}}
-  - username: ${{env DECK_CONSUMER_NAME}}
+      - id: a${{ env DECK_SECRETO_CONSUMER_ID}}
+        key: ${{ env DECK_SECRETO_APIKEY}}
+  - username: ${{ env DECK_CONSUMER_NAME}}
 
 jwt_secrets:
-  - consumer: ${{env DECK_CONSUMER_NAME_KEYCLOAK}}
+  - consumer: ${{ env DECK_CONSUMER_NAME_KEYCLOAK}}
     algorithm: RS256
-    key: ${{env DECK_SECRETO_CONSUMER_KEY}}
+    key: ${{ env DECK_SECRETO_CONSUMER_KEY}}
     rsa_public_key : |
       -----BEGIN PUBLIC KEY-----
-      ${{env DECK_SECRETO_PUBLIC_KEY}}
+      ${{ env DECK_SECRETO_PUBLIC_KEY}}
       -----END PUBLIC KEY-----
 
 
@@ -46,6 +46,6 @@ plugins:
   - name: opentelemetry
     config:
       # Apuntamos al contenedor interno de Jaeger en el puerto OTLP
-      endpoint: ${{env DECK_SECRETO_OPENTELEMETRY_ENDPOINT}}
+      endpoint: ${{ env DECK_SECRETO_OPENTELEMETRY_ENDPOINT}}
       resource_attributes:
         service.name: api-gateway-pasantia
