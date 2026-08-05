@@ -46,7 +46,9 @@ services:
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
-      KONG_ADMIN_ERROR_LOG: /dev/stderr 
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_TRACING_INSTRUMENTATIONS: all
+      KONG_TRACING_SAMPLING_RATE: 1.0
     volumes:
       - ./kong.yaml:/usr/local/kong/declarative/kong.yaml
     ports:
@@ -70,8 +72,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=${DECK_SECRETO_GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${DECK_SECRETO_GRAFANA_PASSWORD}
     volumes:
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
@@ -85,8 +87,8 @@ services:
     image: quay.io/keycloak/keycloak:latest
     command: start-dev --import-realm
     environment:
-      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
-      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_BOOTSTRAP_ADMIN_USERNAME=${DECK_SECRETO_KEYCLOACK_USERNAME}
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=${DECK_SECRETO_KEYCLOACK_PASSWORD}
     ports:
       - "8082:8080" 
     volumes:
@@ -95,6 +97,42 @@ services:
     networks:
       - red_interna
       - red_publica
+  
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    
+    restart: on-failure
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+    
+    expose: #solo abre el puerto para contenedores dentro de la misma red
+      - "16686"
+      - "4318"
+    
+   
+
+    networks:
+      - red_interna
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    expose:
+      - "9200"
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data
+    networks:
+      - red_interna
+    
+    
+
+
+
 
 networks:
   red_interna:
@@ -107,3 +145,4 @@ volumes:
   prometheus_data:
   grafana_data:
   keycloak_data:
+  elastic_data:

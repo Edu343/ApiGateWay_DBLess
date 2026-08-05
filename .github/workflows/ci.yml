@@ -1,4 +1,4 @@
-name: Validacion de Infraestructura (decK)
+name: Validar API Gateway Kong (KOng DB-Less)
 
 on:
   push:
@@ -9,12 +9,23 @@ on:
       - main
 
 jobs:
-  auditoria-kong:
-    runs-on: ubuntu-latest 
+  validacion-deck:
+    name: validar sintaxis con decK
+    runs-on: ubuntu-latest
+
 
     steps:
-      - name: Descargar el código del repositorio
+      - name: Descargar el código del repositorio en el servidor temporal
         uses: actions/checkout@v4
-
-      - name: Validar sintaxis y lógica de kong.yaml
-        run: docker run --rm -v "${{ github.workspace }}:/workspace" -w /workspace -e DECK_SECRETO_APP="${{ secrets.DECK_SECRETO_APP }}" kong/deck:latest file validate kong.yaml
+        
+      - name: Validar kong.yaml
+        run: |
+          docker run --rm \
+          -v "${{ github.workspace }}:/workspace" \
+          -w /workspace \
+          -e DECK_SECRETO_CONSUMER_ID="${{ secrets.DECK_SECRETO_CONSUMER_ID }}" \
+          -e DECK_SECRETO_APIKEY="${{ secrets.DECK_SECRETO_APIKEY }}" \
+          -e DECK_SECRETO_CONSUMER_KEY="${{ secrets.DECK_SECRETO_CONSUMER_KEY }}" \
+          -e DECK_SECRETO_PUBLIC_KEY="${{ secrets.DECK_SECRETO_PUBLIC_KEY }}" \
+          -e DECK_SECRETO_OPENTELEMETRY_ENDPOINT="${{ secrets.DECK_SECRETO_OPENTELEMETRY_ENDPOINT }}" \
+          kong/deck:latest file validate kong.yaml
