@@ -30,4 +30,5 @@ jobs:
           -e DECK_SECRETO_CONSUMER_KEY="${{ secrets.DECK_SECRETO_CONSUMER_KEY }}" \
           -e DECK_SECRETO_PUBLIC_KEY="${{ secrets.DECK_SECRETO_PUBLIC_KEY }}" \
           -e DECK_SECRETO_OPENTELEMETRY_ENDPOINT="${{ secrets.DECK_SECRETO_OPENTELEMETRY_ENDPOINT }}" \
+          -e DECK_SECRETO_KEY_SECRETO="${{ secrets.DECK_SECRETO_KEY_SECRETO }}" \
           kong/deck:latest file validate kong.yaml
