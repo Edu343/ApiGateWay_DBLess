@@ -32,7 +32,7 @@ consumers:
     jwt_secrets:
       - algorithm: RS256
         key: ${{ env "DECK_SECRETO_CONSUMER_KEY" }}
-        secret: "no-se-usa-para-rs256"
+        secret: ${{ env "DECK_SECRETO_KEY_SECRETO" }}
         rsa_public_key: |
           -----BEGIN PUBLIC KEY-----
           ${{ env "DECK_SECRETO_PUBLIC_KEY" }}
